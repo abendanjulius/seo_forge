@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YT Shorts SEO Forge — Script → Title, Description, Tags</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --bg-2: #131316;
+    --surface: #18181c;
+    --surface-2: #1f1f25;
+    --line: #2a2a32;
+    --line-strong: #3a3a45;
+    --ink: #f4f4f5;
+    --ink-dim: #a1a1aa;
+    --ink-mute: #6b6b75;
+    --accent: #ff5722;
+    --accent-2: #ffb800;
+    --good: #4ade80;
+    --bad: #f87171;
+    --display: 'Fraunces', Georgia, serif;
+    --sans: 'Bricolage Grotesque', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  body {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(255, 87, 34, 0.08), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, rgba(255, 184, 0, 0.05), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  /* ============ LAYOUT ============ */
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  /* ============ HEADER ============ */
+  header.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .brand h1 {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+
+  .brand h1 .accent {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  .brand p {
+    color: var(--ink-dim);
+    font-size: 15px;
+    margin-top: 8px;
+    max-width: 520px;
+  }
+
+  .key-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .key-bar .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--bad);
+    box-shadow: 0 0 8px currentColor;
+  }
+  .key-bar.set .dot { background: var(--good); }
+
+  .key-bar button {
+    background: none;
+    border: none;
+    color: var(--ink-dim);
+    font-family: var(--mono);
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 3px;
+  }
+  .key-bar button:hover { color: var(--ink); }
+
+  /* ============ MAIN GRID ============ */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (min-width: 960px) {
+    .grid { grid-template-columns: 5fr 7fr; align-items: start; }
+  }
+
+  /* ============ PANELS ============ */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface-2);
+  }
+
+  .panel-head h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  .panel-head .meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .panel-body { padding: 20px; }
+
+  /* ============ INPUT PANEL ============ */
+  textarea#script {
+    width: 100%;
+    min-height: 280px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.15s;
+  }
+  textarea#script:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.15);
+  }
+  textarea#script::placeholder { color: var(--ink-mute); }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .select-wrap {
+    flex: 1;
+    min-width: 140px;
+    position: relative;
+  }
+
+  select {
+    width: 100%;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 32px 10px 12px;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 13px;
+    cursor: pointer;
+    appearance: none;
+  }
+  .select-wrap::after {
+    content: '▾';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-mute);
+    pointer-events: none;
+    font-size: 12px;
+  }
+
+  button.primary {
+    flex: 1;
+    min-width: 160px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(255, 87, 34, 0.25);
+  }
+  button.primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(255, 87, 34, 0.35);
+  }
+  button.primary:active:not(:disabled) { transform: translateY(0); }
+  button.primary:disabled {
+    background: var(--line-strong);
+    color: var(--ink-mute);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .char-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    margin-top: 8px;
+  }
+
+  /* ============ OUTPUT PANEL ============ */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ink-mute);
+  }
+  .empty-state .icon {
+    font-family: var(--display);
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--line-strong);
+    font-style: italic;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .empty-state p { font-size: 14px; }
+
+  /* SEO Section Block */
+  .seo-section {
+    border-bottom: 1px solid var(--line);
+  }
+  .seo-section:last-child { border-bottom: none; }
+
+  .seo-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: var(--surface-2);
+  }
+  .seo-section-head .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .seo-section-head .label::before {
+    content: '';
+    width: 4px;
+    height: 12px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .copy-btn {
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-dim);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .copy-btn.copied {
+    border-color: var(--good);
+    color: var(--good);
+  }
+
+  .seo-section-body {
+    padding: 16px 20px;
+  }
+
+  /* Title with alternatives */
+  .title-main {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .title-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    margin-bottom: 14px;
+  }
+
+  .alternatives {
+    margin-top: 12px;
+  }
+  .alternatives .alt-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .alt-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-top: 1px dashed var(--line);
+    gap: 12px;
+  }
+  .alt-item span {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink-dim);
+    flex: 1;
+  }
+  .alt-item .copy-btn { padding: 3px 8px; font-size: 10px; }
+
+  /* Description */
+  .desc-text {
+    font-size: 14px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    color: var(--ink-dim);
+  }
+  .desc-text strong { color: var(--ink); font-weight: 600; }
+
+  /* Tags */
+  .tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag-chip {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    padding: 5px 10px;
+    border-radius: 100px;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  /* Category & Hook */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .pill .accent { color: var(--accent); }
+
+  .tip {
+    background: linear-gradient(135deg, rgba(255, 87, 34, 0.08), rgba(255, 184, 0, 0.04));
+    border-left: 3px solid var(--accent);
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.55;
+  }
+  .tip strong { color: var(--ink); }
+
+  /* ============ LOADER ============ */
+  .loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 60px 20px;
+    color: var(--ink-dim);
+  }
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--line);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-msg {
+    font-family: var(--mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ============ MODAL ============ */
+  .modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    max-width: 460px;
+    width: 100%;
+    padding: 28px;
+  }
+  .modal h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .modal p {
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+  .modal p a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .modal input {
+    width: 100%;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .modal input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .modal-note {
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  .modal-actions button {
+    padding: 9px 16px;
+    border-radius: 7px;
+    border: none;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink-dim);
+    border: 1px solid var(--line) !important;
+  }
+  .btn-primary-sm {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .error-box {
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    color: #fca5a5;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin: 16px 20px;
+    line-height: 1.5;
+  }
+
+  footer {
+    margin-top: 40px;
+    text-align: center;
+    color: var(--ink-mute);
+    font-size: 12px;
+    font-family: var(--mono);
+  }
+  footer a { color: var(--ink-dim); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <h1>SEO <span class="accent">Forge</span></h1>
+      <p>Paste your YouTube Shorts script. Get a title, description, tags, category, and optimization tips — instantly. Powered by Claude.</p>
+    </div>
+    <div class="key-bar" id="keyBar">
+      <span class="dot"></span>
+      <span id="keyStatus">No API key</span>
+      <button id="keyBtn">Set key</button>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- INPUT -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2>The Script</h2>
+        <span class="meta" id="wordCount">0 words</span>
+      </div>
+      <div class="panel-body">
+        <textarea id="script" placeholder="Did you know that Elon Musk almost lost everything trying to build SpaceX?&#10;&#10;After selling PayPal, he poured about 100 million dollars into rockets, even as the first three launches failed..."></textarea>
+
+        <div class="controls">
+          <div class="select-wrap">
+            <select id="niche">
+              <option value="auto">Detect niche</option>
+              <option value="business">Business / Founders</option>
+              <option value="science">Science / Space</option>
+              <option value="history">History / Mystery</option>
+              <option value="tech">Tech / AI</option>
+              <option value="finance">Finance / Money</option>
+              <option value="psychology">Psychology / Mindset</option>
+              <option value="fitness">Fitness / Health</option>
+              <option value="food">Food / Cooking</option>
+              <option value="travel">Travel / Places</option>
+              <option value="motivation">Motivation</option>
+            </select>
+          </div>
+          <button class="primary" id="genBtn">Generate SEO →</button>
+        </div>
+
+        <div class="char-count" id="charCount">0 characters</div>
+      </div>
+    </section>
+
+    <!-- OUTPUT -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2>SEO Package</h2>
+        <span class="meta" id="outMeta">Awaiting script</span>
+      </div>
+      <div id="output">
+        <div class="empty-state">
+          <div class="icon">✶</div>
+          <p>Your title, description, tags & tips will appear here.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    Built with Claude API · <a href="https://console.anthropic.com" target="_blank" rel="noopener">Get an API key</a>
+  </footer>
+
+</div>
+
+<!-- API KEY MODAL -->
+<div class="modal-bg" id="keyModal">
+  <div class="modal">
+    <h3>Set your Anthropic API key</h3>
+    <p>This app calls the Claude API directly from your browser. Get a key at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</p>
+    <input type="password" id="keyInput" placeholder="sk-ant-..." autocomplete="off" />
+    <p class="modal-note">🔒 Your key is stored only in your browser (localStorage) and sent directly to api.anthropic.com. It never touches any other server. Clear it anytime.</p>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="keyClear">Clear key</button>
+      <button class="btn-primary-sm" id="keySave">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ STATE & KEY MANAGEMENT ============
+const KEY_STORE = 'anthropic_api_key_seoforge';
+
+function getKey() { return localStorage.getItem(KEY_STORE) || ''; }
+function setKey(k) { localStorage.setItem(KEY_STORE, k); updateKeyUI(); }
+function clearKey() { localStorage.removeItem(KEY_STORE); updateKeyUI(); }
+
+function updateKeyUI() {
+  const bar = document.getElementById('keyBar');
+  const status = document.getElementById('keyStatus');
+  const btn = document.getElementById('keyBtn');
+  if (getKey()) {
+    bar.classList.add('set');
+    status.textContent = 'API key set';
+    btn.textContent = 'Change';
+  } else {
+    bar.classList.remove('set');
+    status.textContent = 'No API key';
+    btn.textContent = 'Set key';
+  }
+}
+
+// Modal handlers
+document.getElementById('keyBtn').onclick = () => {
+  document.getElementById('keyInput').value = getKey();
+  document.getElementById('keyModal').classList.add('open');
+};
+document.getElementById('keySave').onclick = () => {
+  const v = document.getElementById('keyInput').value.trim();
+  if (v) setKey(v);
+  document.getElementById('keyModal').classList.remove('open');
+};
+document.getElementById('keyClear').onclick = () => {
+  clearKey();
+  document.getElementById('keyInput').value = '';
+};
+document.getElementById('keyModal').onclick = (e) => {
+  if (e.target.id === 'keyModal') e.currentTarget.classList.remove('open');
+};
+
+updateKeyUI();
+
+// ============ SCRIPT INPUT ============
+const scriptEl = document.getElementById('script');
+function updateCount() {
+  const text = scriptEl.value;
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  document.getElementById('wordCount').textContent = `${words} word${words === 1 ? '' : 's'}`;
+  document.getElementById('charCount').textContent = `${text.length} characters`;
+}
+scriptEl.addEventListener('input', updateCount);
+updateCount();
+
+// ============ GENERATION ============
+const LOADING_MSGS = [
+  'Reading script & extracting hook',
+  'Brewing curiosity-driven titles',
+  'Crafting keyword-rich description',
+  'Mining tags & hashtags',
+  'Polishing optimization tips'
+];
+
+function showLoader() {
+  const out = document.getElementById('output');
+  out.innerHTML = `
+    <div class="loader">
+      <div class="spinner"></div>
+      <div class="loader-msg" id="loadMsg">${LOADING_MSGS[0]}</div>
+    </div>
+  `;
+  let i = 0;
+  return setInterval(() => {
+    i = (i + 1) % LOADING_MSGS.length;
+    const el = document.getElementById('loadMsg');
+    if (el) el.textContent = LOADING_MSGS[i];
+  }, 1800);
+}
+
+function showError(msg) {
+  const out = document.getElementById('output');
+  out.innerHTML = `<div class="error-box"><strong>Error:</strong> ${msg}</div>`;
+  document.getElementById('outMeta').textContent = 'Error';
+}
+
+document.getElementById('genBtn').onclick = async () => {
+  const script = scriptEl.value.trim();
+  const niche = document.getElementById('niche').value;
+
+  if (!script) { alert('Please paste a script first.'); return; }
+  if (script.split(/\s+/).length < 8) { alert('Script seems too short. Add a bit more detail.'); return; }
+  if (!getKey()) {
+    document.getElementById('keyModal').classList.add('open');
+    return;
+  }
+
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  document.getElementById('outMeta').textContent = 'Working...';
+  const spinner = showLoader();
+
+  try {
+    const result = await generateSEO(script, niche);
+    clearInterval(spinner);
+    renderResult(result);
+    document.getElementById('outMeta').textContent = 'Ready · click to copy';
+  } catch (err) {
+    clearInterval(spinner);
+    showError(err.message || 'Something went wrong.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate SEO →';
+  }
+};
+
+// ============ API CALL ============
+async function generateSEO(script, niche) {
+  const nicheHint = niche === 'auto' ? 'auto-detect the niche from the script' : `the niche is ${niche}`;
+
+  const systemPrompt = `You are an expert YouTube SEO strategist specializing in Shorts (vertical, <60s videos). You produce optimized metadata that maximizes click-through, watch time, and discovery via search + browse + suggested feeds.
+
+You understand:
+- YouTube's algorithm rewards curiosity hooks, retention, and engagement signals
+- Titles under 60 chars perform best on mobile; emotional/numerical hooks beat dry descriptions
+- Descriptions should front-load context, use natural keyword density (not stuffing), and end with a CTA + hashtags
+- Tags help with related-video surfacing; mix broad + specific + long-tail
+- Category choice influences which recommendation cluster the video lands in
+
+You ALWAYS respond with valid JSON only. No markdown fences, no preamble.`;
+
+  const userPrompt = `Generate a complete YouTube Shorts SEO package for this script (${nicheHint}):
+
+---
+${script}
+---
+
+Respond with ONLY valid JSON in this exact shape:
+
+{
+  "title_primary": "Main title under 60 chars, with at most 1 emoji",
+  "title_alternatives": ["Alt 1", "Alt 2", "Alt 3"],
+  "description": "Full YouTube description: 2-3 short paragraphs of context with natural keyword density, then a CTA line starting with '🔔 Subscribe...', then a blank line, then 15-20 relevant hashtags. Use real line breaks (\\n). End every paragraph with proper punctuation.",
+  "tags": ["tag1", "tag2", "..."],
+  "category": "One of: Science & Technology | Education | Entertainment | People & Blogs | Howto & Style | News & Politics | Sports | Gaming | Comedy | Music | Film & Animation",
+  "category_reason": "One sentence explaining why this category fits.",
+  "hook_suggestion": "A short on-screen text hook (under 8 words) to overlay in the first 1.5 seconds for maximum retention.",
+  "pinned_comment": "A short pinned-comment idea that drives reply engagement (a question is best).",
+  "thumbnail_idea": "One sentence describing a high-curiosity custom thumbnail concept."
+}
+
+Requirements:
+- title_primary: punchy, curiosity-driven, includes the main keyword/named entity, at most 1 emoji
+- title_alternatives: 3 stylistically different alternatives (one with numbers, one emotional, one question)
+- tags: 25-30 tags, comma-free, mixing broad terms, named entities, niche-specific phrases, and long-tail search queries
+- description: minimum 90 words of context before the CTA. Include 15-20 hashtags at the end.`;
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': getKey(),
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-5',
+      max_tokens: 2000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }]
+    })
+  });
+
+  if (!resp.ok) {
+    let errMsg = `API error (${resp.status})`;
+    try {
+      const errData = await resp.json();
+      if (errData.error && errData.error.message) errMsg += `: ${errData.error.message}`;
+    } catch (_) {}
+    if (resp.status === 401) errMsg = 'Invalid API key. Click "Change" in the top-right to update it.';
+    if (resp.status === 429) errMsg = 'Rate limited. Wait a few seconds and try again.';
+    throw new Error(errMsg);
+  }
+
+  const data = await resp.json();
+  const text = data.content.filter(b => b.type === 'text').map(b => b.text).join('').trim();
+
+  // Strip code fences if model wraps in them despite instruction
+  const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+
+  let parsed;
+  try {
+    parsed = JSON.parse(cleaned);
+  } catch (e) {
+    throw new Error('Got malformed response. Try regenerating.');
+  }
+  return parsed;
+}
+
+// ============ RENDER ============
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderResult(r) {
+  const out = document.getElementById('output');
+
+  const altsHTML = (r.title_alternatives || []).map((alt, i) => `
+    <div class="alt-item">
+      <span>${escapeHTML(alt)}</span>
+      <button class="copy-btn" data-copy="${escapeHTML(alt)}">Copy</button>
+    </div>
+  `).join('');
+
+  const tagsHTML = (r.tags || []).map(t => `<span class="tag-chip">${escapeHTML(t)}</span>`).join('');
+  const tagsString = (r.tags || []).join(', ');
+
+  const titleLen = (r.title_primary || '').length;
+  const lenColor = titleLen <= 60 ? 'var(--good)' : 'var(--bad)';
+
+  out.innerHTML = `
+    <!-- TITLE -->
+    <div class="seo-section">
+      <div class="seo-section-head">
+        <div class="label">Title</div>
+        <button class="copy-btn" data-copy="${escapeHTML(r.title_primary || '')}">Copy</button>
+      </div>
+      <div class="seo-section-body">
+        <div class="title-main">${escapeHTML(r.title_primary || '')}</div>
+        <div class="title-meta">
+          <span style="color:${lenColor}">${titleLen} chars</span> · max 60 recommended
+        </div>
+        ${altsHTML ? `
+          <div class="alternatives">
+            <div class="alt-label">Alternatives</div>
+            ${altsHTML}
+          </div>
+        ` : ''}
+      </div>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="seo-section">
+      <div class="seo-section-head">
+        <div class="label">Description</div>
+        <button class="copy-btn" data-copy="${escapeHTML(r.description || '')}">Copy</button>
+      </div>
+      <div class="seo-section-body">
+        <div class="desc-text">${escapeHTML(r.description || '')}</div>
+      </div>
+    </div>
+
+    <!-- TAGS -->
+    <div class="seo-section">
+      <div class="seo-section-head">
+        <div class="label">Tags (${(r.tags || []).length})</div>
+        <button class="copy-btn" data-copy="${escapeHTML(tagsString)}">Copy all</button>
+      </div>
+      <div class="seo-section-body">
+        <div class="tags-cloud">${tagsHTML}</div>
+      </div>
+    </div>
+
+    <!-- CATEGORY -->
+    <div class="seo-section">
+      <div class="seo-section-head">
+        <div class="label">Category</div>
+      </div>
+      <div class="seo-section-body">
+        <div class="pill"><span class="accent">▸</span> ${escapeHTML(r.category || '')}</div>
+        ${r.category_reason ? `<div class="tip" style="margin-top:14px">${escapeHTML(r.category_reason)}</div>` : ''}
+      </div>
+    </div>
+
+    <!-- OPTIMIZATION TIPS -->
+    <div class="seo-section">
+      <div class="seo-section-head">
+        <div class="label">Optimization Tips</div>
+      </div>
+      <div class="seo-section-body">
+        ${r.hook_suggestion ? `<div class="tip"><strong>🎯 First-1.5s hook overlay:</strong> ${escapeHTML(r.hook_suggestion)}</div>` : ''}
+        ${r.pinned_comment ? `<div class="tip"><strong>📌 Pinned comment:</strong> ${escapeHTML(r.pinned_comment)}</div>` : ''}
+        ${r.thumbnail_idea ? `<div class="tip"><strong>🖼️ Custom thumbnail:</strong> ${escapeHTML(r.thumbnail_idea)}</div>` : ''}
+      </div>
+    </div>
+  `;
+
+  // Attach copy handlers
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.getAttribute('data-copy');
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = btn.textContent;
+        btn.textContent = '✓ Copied';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.classList.remove('copied');
+        }, 1500);
+      } catch (e) {
+        alert('Could not copy. Try selecting manually.');
+      }
+    });
+  });
+}
+</script>
+
+</body>
+</html>
