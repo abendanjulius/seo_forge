@@ -1280,7 +1280,7 @@ Respond with ONLY valid JSON in this exact shape:
   "pinned_comment": "A short pinned-comment idea that drives reply engagement (a question is best).",
   "alt_account_comment": "A short 'mind-blown reaction' comment to post from a secondary account. It should sound like a genuine viewer who just learned something wild — NOT a question, NOT inviting a reply from the creator. Casual, conversational, 1-2 sentences. Examples of tone: 'Bro the part about [X] actually broke my brain', 'Wait, I genuinely never knew this — going to annoy my friends with it now lol', 'The [specific detail] thing got me 😭 mind = blown'. It should tease ONE specific surprising detail from the script to entice comment-readers, without spoiling the full answer. Use casual lowercase, light slang, maybe one emoji.",
   "thumbnail_idea": "One sentence describing a high-curiosity custom thumbnail concept.",
-  "thumbnail_topic_title": "A punchy 2-4 word ALL CAPS hook title for the thumbnail that captures the script's most surprising or curiosity-driving fact (e.g. 'BANANAS ARE BERRIES', 'HONEY NEVER SPOILS', 'OCTOPUSES HAVE 3 HEARTS'). It should imply a punchline without giving away the full answer.",
+  "thumbnail_topic_title": "A punchy 2-5 word ALL CAPS curiosity-hook title for the thumbnail. CRITICAL: This must CREATE a curiosity gap, NOT reveal the answer. The viewer should feel they HAVE TO click to find out what's going on. Do NOT state the fact — tease it. Good examples (hook + withholds answer): 'WAIT… BANANAS ARE WHAT?', 'THIS FOOD CAN'T DIE', 'WHY OCTOPUSES ARE BUILT WRONG', 'THE ONLY ANIMAL THAT CAN'T DO THIS', 'YOUR COFFEE IS LYING TO YOU', 'NOBODY TELLS YOU THIS ABOUT EGGS'. Bad examples (gives away the fact, no reason to click): 'BANANAS ARE BERRIES', 'HONEY NEVER SPOILS', 'OCTOPUSES HAVE 3 HEARTS'. Techniques to use: rhetorical questions ('BANANAS ARE WHAT?'), vague references ('THIS', 'THE ONE THING'), implied contradictions ('BUILT WRONG', 'LYING TO YOU'), or 'nobody/everyone' framing. Punctuation like '?', '…', or '!' is encouraged for energy.",
   "thumbnail_visual_subject": "A vivid one-line description of the hero subject for the thumbnail illustration. ONE clear object or character only, with personality details. Examples: 'a giant glossy yellow banana with a surprised cartoon face and big eyes', 'a dripping honey jar with a cartoon bee floating above looking shocked', 'a cartoon octopus with three visible glowing hearts through its body'."
 }
 
@@ -1289,7 +1289,7 @@ Requirements:
 - title_alternatives: 3 stylistically different alternatives (one with numbers, one emotional, one question)
 - tags: 25-30 tags, comma-free, mixing broad terms, named entities, niche-specific phrases, and long-tail search queries
 - description: minimum 90 words of context before the CTA. Include 15-20 hashtags at the end.
-- thumbnail_topic_title: MUST be 2-4 words, ALL CAPS, punchy and surprising. This is the main hook text on the thumbnail.
+- thumbnail_topic_title: MUST be 2-5 words, ALL CAPS, and CREATE a curiosity gap rather than reveal the fact. The viewer should feel they need to click to learn the answer. Use rhetorical questions, vague references ('THIS', 'THE ONE THING'), implied contradictions, or surprise framing. NEVER state the actual fact in the title.
 - thumbnail_visual_subject: MUST describe a single hero subject (one object/character) with personality. No scenes, no multiple objects.`;
 
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1508,10 +1508,10 @@ ${lockedBrandLayer}`
         <div class="thumb-block">
           <div class="thumb-topic">
             <div>
-              <div class="thumb-topic-label">Topic Title (the hook)</div>
+              <div class="thumb-topic-label">Curiosity Hook (thumbnail title)</div>
               <div class="thumb-topic-text">${escapeHTML(topicTitle)}</div>
             </div>
-            <button class="copy-btn" data-copy="${escapeHTML(topicTitle)}">Copy title</button>
+            <button class="copy-btn" data-copy="${escapeHTML(topicTitle)}">Copy hook</button>
           </div>
           <div class="thumb-style-bar" id="thumbStyleBar">
             ${pillsHTML}
