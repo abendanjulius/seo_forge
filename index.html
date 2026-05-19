@@ -586,6 +586,61 @@
   }
   .tip strong { color: var(--ink); }
 
+  /* ============ COMMENT CARDS (pinned + alt-account) ============ */
+  .comment-card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .comment-card:last-child { margin-bottom: 0; }
+  .comment-card.pinned {
+    border-left: 3px solid var(--accent);
+  }
+  .comment-card.alt {
+    border-left: 3px solid #8b5cf6;
+  }
+  .comment-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+  .comment-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+  }
+  .comment-card.pinned .comment-tag { color: var(--accent); }
+  .comment-card.alt .comment-tag { color: #a78bfa; }
+  .comment-tag .ico { font-size: 13px; }
+  .comment-body {
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
+  .comment-purpose {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--ink-mute);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+  }
+
   /* ============ THUMBNAIL PROMPT (special block) ============ */
   .thumb-block {
     background: linear-gradient(135deg, rgba(255, 87, 34, 0.08), rgba(255, 184, 0, 0.04));
@@ -1223,6 +1278,7 @@ Respond with ONLY valid JSON in this exact shape:
   "category_reason": "One sentence explaining why this category fits.",
   "hook_suggestion": "A short on-screen text hook (under 8 words) to overlay in the first 1.5 seconds for maximum retention.",
   "pinned_comment": "A short pinned-comment idea that drives reply engagement (a question is best).",
+  "alt_account_comment": "A short 'mind-blown reaction' comment to post from a secondary account. It should sound like a genuine viewer who just learned something wild — NOT a question, NOT inviting a reply from the creator. Casual, conversational, 1-2 sentences. Examples of tone: 'Bro the part about [X] actually broke my brain', 'Wait, I genuinely never knew this — going to annoy my friends with it now lol', 'The [specific detail] thing got me 😭 mind = blown'. It should tease ONE specific surprising detail from the script to entice comment-readers, without spoiling the full answer. Use casual lowercase, light slang, maybe one emoji.",
   "thumbnail_idea": "One sentence describing a high-curiosity custom thumbnail concept.",
   "thumbnail_topic_title": "A punchy 2-4 word ALL CAPS hook title for the thumbnail that captures the script's most surprising or curiosity-driving fact (e.g. 'BANANAS ARE BERRIES', 'HONEY NEVER SPOILS', 'OCTOPUSES HAVE 3 HEARTS'). It should imply a punchline without giving away the full answer.",
   "thumbnail_visual_subject": "A vivid one-line description of the hero subject for the thumbnail illustration. ONE clear object or character only, with personality details. Examples: 'a giant glossy yellow banana with a surprised cartoon face and big eyes', 'a dripping honey jar with a cartoon bee floating above looking shocked', 'a cartoon octopus with three visible glowing hearts through its body'."
@@ -1246,7 +1302,7 @@ Requirements:
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-5',
-      max_tokens: 2600,
+      max_tokens: 2800,
       system: systemPrompt,
       messages: [{ role: 'user', content: userPrompt }]
     })
@@ -1298,6 +1354,44 @@ function renderResult(r) {
 
   const titleLen = (r.title_primary || '').length;
   const lenColor = titleLen <= 60 ? 'var(--good)' : 'var(--bad)';
+
+  // ============ Build Comment Strategy Block ============
+  const pinnedComment = (r.pinned_comment || '').trim();
+  const altComment = (r.alt_account_comment || '').trim();
+  let commentsBlockHTML = '';
+
+  if (pinnedComment || altComment) {
+    const pinnedCard = pinnedComment ? `
+      <div class="comment-card pinned">
+        <div class="comment-head">
+          <div class="comment-tag"><span class="ico">📌</span>Pinned comment (your main account)</div>
+          <button class="copy-btn" data-copy="${escapeHTML(pinnedComment)}">Copy</button>
+        </div>
+        <div class="comment-body">${escapeHTML(pinnedComment)}</div>
+        <div class="comment-purpose">Goal: spark replies &amp; engagement signals</div>
+      </div>` : '';
+
+    const altCard = altComment ? `
+      <div class="comment-card alt">
+        <div class="comment-head">
+          <div class="comment-tag"><span class="ico">💥</span>Alt-account comment (no reply expected)</div>
+          <button class="copy-btn" data-copy="${escapeHTML(altComment)}">Copy</button>
+        </div>
+        <div class="comment-body">${escapeHTML(altComment)}</div>
+        <div class="comment-purpose">Goal: tease curious comment-readers · post from secondary account</div>
+      </div>` : '';
+
+    commentsBlockHTML = `
+    <div class="seo-section">
+      <div class="seo-section-head">
+        <div class="label">Comment Strategy</div>
+      </div>
+      <div class="seo-section-body">
+        ${pinnedCard}
+        ${altCard}
+      </div>
+    </div>`;
+  }
 
   // ============ Build Brain Morsel Thumbnail Prompt ============
   const topicTitle = (r.thumbnail_topic_title || '').toUpperCase().trim();
@@ -1488,6 +1582,9 @@ ${lockedBrandLayer}`
       </div>
     </div>
 
+    <!-- COMMENT STRATEGY -->
+    ${commentsBlockHTML}
+
     <!-- OPTIMIZATION TIPS -->
     <div class="seo-section">
       <div class="seo-section-head">
@@ -1495,7 +1592,6 @@ ${lockedBrandLayer}`
       </div>
       <div class="seo-section-body">
         ${r.hook_suggestion ? `<div class="tip"><strong>🎯 First-1.5s hook overlay:</strong> ${escapeHTML(r.hook_suggestion)}</div>` : ''}
-        ${r.pinned_comment ? `<div class="tip"><strong>📌 Pinned comment:</strong> ${escapeHTML(r.pinned_comment)}</div>` : ''}
         ${r.thumbnail_idea ? `<div class="tip"><strong>🖼️ Custom thumbnail:</strong> ${escapeHTML(r.thumbnail_idea)}</div>` : ''}
       </div>
     </div>
