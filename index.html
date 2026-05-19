@@ -125,7 +125,170 @@
     gap: 24px;
   }
   @media (min-width: 960px) {
-    .grid { grid-template-columns: 5fr 7fr; align-items: start; }
+    .grid { grid-template-columns: 240px 5fr 7fr; align-items: start; }
+  }
+
+  /* ============ HISTORY SIDEBAR ============ */
+  .history-panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    position: sticky;
+    top: 24px;
+    max-height: calc(100vh - 48px);
+    display: flex;
+    flex-direction: column;
+  }
+  .history-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface-2);
+    flex-shrink: 0;
+  }
+  .history-head h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .history-head .count-badge {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    padding: 2px 7px;
+    border-radius: 100px;
+    font-family: var(--mono);
+    font-size: 10px;
+  }
+  .history-clear {
+    background: none;
+    border: none;
+    color: var(--ink-mute);
+    font-family: var(--mono);
+    font-size: 10px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .history-clear:hover { color: var(--bad); }
+
+  .history-list {
+    overflow-y: auto;
+    flex: 1;
+    padding: 8px;
+  }
+  .history-list::-webkit-scrollbar { width: 6px; }
+  .history-list::-webkit-scrollbar-track { background: transparent; }
+  .history-list::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 3px;
+  }
+
+  .history-empty {
+    text-align: center;
+    padding: 40px 16px;
+    color: var(--ink-mute);
+    font-size: 12px;
+    font-family: var(--mono);
+    line-height: 1.6;
+  }
+  .history-empty .ico {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 32px;
+    color: var(--line-strong);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .hist-item {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .hist-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .hist-item.active {
+    border-color: var(--accent);
+    background: rgba(255, 87, 34, 0.08);
+  }
+  .hist-item-title {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 6px;
+    /* truncate to 2 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    padding-right: 18px;
+  }
+  .hist-item-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .hist-niche {
+    background: rgba(255, 87, 34, 0.12);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 87, 34, 0.25);
+    font-size: 9px;
+  }
+  .hist-delete {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: transparent;
+    border: none;
+    color: var(--ink-mute);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 2px 5px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .hist-item:hover .hist-delete { opacity: 1; }
+  .hist-delete:hover {
+    color: var(--bad);
+    background: rgba(248, 113, 113, 0.1);
+  }
+
+  /* Mobile: history becomes collapsible */
+  @media (max-width: 959px) {
+    .history-panel {
+      position: static;
+      max-height: 320px;
+    }
   }
 
   /* ============ PANELS ============ */
@@ -423,6 +586,119 @@
   }
   .tip strong { color: var(--ink); }
 
+  /* ============ THUMBNAIL PROMPT (special block) ============ */
+  .thumb-block {
+    background: linear-gradient(135deg, rgba(255, 87, 34, 0.08), rgba(255, 184, 0, 0.04));
+    border: 1px solid rgba(255, 87, 34, 0.25);
+    border-radius: 10px;
+    margin-top: 4px;
+    overflow: hidden;
+  }
+  .thumb-topic {
+    padding: 14px 16px;
+    background: rgba(255, 87, 34, 0.1);
+    border-bottom: 1px solid rgba(255, 87, 34, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .thumb-topic-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .thumb-topic-text {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: 20px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .thumb-prompt-wrap {
+    padding: 14px 16px;
+  }
+  .thumb-prompt-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .thumb-prompt-head .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+  }
+  .thumb-prompt-text {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink-dim);
+    white-space: pre-wrap;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+  .thumb-prompt-text::-webkit-scrollbar { width: 8px; }
+  .thumb-prompt-text::-webkit-scrollbar-track { background: var(--bg); }
+  .thumb-prompt-text::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 4px;
+  }
+  .thumb-hint {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mute);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* Style selector pills */
+  .thumb-style-bar {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid rgba(255, 87, 34, 0.2);
+  }
+  .style-pill {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-family: var(--mono);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .style-pill:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+  .style-pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(255, 87, 34, 0.3);
+  }
+  .style-pill .pill-icon {
+    margin-right: 4px;
+  }
+
   /* ============ LOADER ============ */
   .loader {
     display: flex;
@@ -571,6 +847,20 @@
 
   <div class="grid">
 
+    <!-- HISTORY SIDEBAR -->
+    <aside class="history-panel">
+      <div class="history-head">
+        <h2>History <span class="count-badge" id="histCount">0</span></h2>
+        <button class="history-clear" id="histClearBtn" title="Clear all saved items">Clear</button>
+      </div>
+      <div class="history-list" id="histList">
+        <div class="history-empty">
+          <span class="ico">✶</span>
+          <div>No saved generations yet.<br>Your history appears here automatically.</div>
+        </div>
+      </div>
+    </aside>
+
     <!-- INPUT -->
     <section class="panel">
       <div class="panel-head">
@@ -682,6 +972,148 @@ document.getElementById('keyModal').onclick = (e) => {
 
 updateKeyUI();
 
+// ============ HISTORY MANAGEMENT ============
+const HIST_STORE = 'seoforge_history';
+const HIST_MAX = 50;
+let currentItemId = null;
+
+function getHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(HIST_STORE) || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveHistory(items) {
+  try {
+    localStorage.setItem(HIST_STORE, JSON.stringify(items));
+  } catch (e) {
+    // quota exceeded — drop oldest until it fits
+    if (items.length > 1) {
+      saveHistory(items.slice(0, items.length - 1));
+    }
+  }
+}
+
+function addToHistory(script, niche, result, styleKey) {
+  const items = getHistory();
+  const id = 'h_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+  const item = {
+    id,
+    timestamp: Date.now(),
+    script,
+    niche,
+    result,
+    styleKey: styleKey || 'comic',
+    label: result.title_primary || 'Untitled'
+  };
+  items.unshift(item);  // newest first
+  if (items.length > HIST_MAX) items.length = HIST_MAX;
+  saveHistory(items);
+  currentItemId = id;
+  renderHistory();
+  return id;
+}
+
+function deleteHistoryItem(id) {
+  const items = getHistory().filter(it => it.id !== id);
+  saveHistory(items);
+  if (currentItemId === id) currentItemId = null;
+  renderHistory();
+}
+
+function clearAllHistory() {
+  if (!confirm('Delete all saved generations? This cannot be undone.')) return;
+  saveHistory([]);
+  currentItemId = null;
+  renderHistory();
+}
+
+function loadHistoryItem(id) {
+  const item = getHistory().find(it => it.id === id);
+  if (!item) return;
+  // Restore script and niche
+  scriptEl.value = item.script;
+  updateCount();
+  const nicheSel = document.getElementById('niche');
+  if (nicheSel) nicheSel.value = item.niche || 'auto';
+  // Render the saved result
+  renderResult(item.result);
+  document.getElementById('outMeta').textContent = 'Restored from history';
+  currentItemId = id;
+  renderHistory();
+  // Restore style pill selection AFTER renderResult builds the DOM
+  setTimeout(() => {
+    if (item.styleKey && item.styleKey !== 'comic') {
+      const pill = document.querySelector(`.style-pill[data-style="${item.styleKey}"]`);
+      if (pill) pill.click();
+    }
+  }, 50);
+  // Scroll output into view on mobile
+  if (window.innerWidth < 960) {
+    document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function timeAgo(ts) {
+  const diff = Math.floor((Date.now() - ts) / 1000);
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+  if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+  const d = new Date(ts);
+  return `${d.getMonth() + 1}/${d.getDate()}`;
+}
+
+function renderHistory() {
+  const items = getHistory();
+  const list = document.getElementById('histList');
+  const countEl = document.getElementById('histCount');
+  countEl.textContent = items.length;
+
+  if (items.length === 0) {
+    list.innerHTML = `
+      <div class="history-empty">
+        <span class="ico">✶</span>
+        <div>No saved generations yet.<br>Your history appears here automatically.</div>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = items.map(it => {
+    const isActive = it.id === currentItemId;
+    const nicheLabel = (it.niche && it.niche !== 'auto') ? it.niche : 'auto';
+    return `
+      <div class="hist-item ${isActive ? 'active' : ''}" data-id="${it.id}">
+        <button class="hist-delete" data-del="${it.id}" title="Delete">×</button>
+        <div class="hist-item-title">${escapeHTML(it.label)}</div>
+        <div class="hist-item-meta">
+          <span class="hist-niche">${escapeHTML(nicheLabel)}</span>
+          <span>${timeAgo(it.timestamp)}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Wire clicks
+  list.querySelectorAll('.hist-item').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (e.target.matches('.hist-delete')) return;
+      loadHistoryItem(el.getAttribute('data-id'));
+    });
+  });
+  list.querySelectorAll('.hist-delete').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      deleteHistoryItem(btn.getAttribute('data-del'));
+    });
+  });
+}
+
+// Initial render + clear button
+document.getElementById('histClearBtn').onclick = clearAllHistory;
+// renderHistory called after scriptEl is defined below
+
 // ============ SCRIPT INPUT ============
 const scriptEl = document.getElementById('script');
 function updateCount() {
@@ -692,6 +1124,7 @@ function updateCount() {
 }
 scriptEl.addEventListener('input', updateCount);
 updateCount();
+renderHistory();
 
 // ============ GENERATION ============
 const LOADING_MSGS = [
@@ -699,6 +1132,7 @@ const LOADING_MSGS = [
   'Brewing curiosity-driven titles',
   'Crafting keyword-rich description',
   'Mining tags & hashtags',
+  'Designing Brain Morsel thumbnail',
   'Polishing optimization tips'
 ];
 
@@ -746,6 +1180,8 @@ document.getElementById('genBtn').onclick = async () => {
     clearInterval(spinner);
     renderResult(result);
     document.getElementById('outMeta').textContent = 'Ready · click to copy';
+    // Auto-save to history
+    addToHistory(script, niche, result, 'comic');
   } catch (err) {
     clearInterval(spinner);
     showError(err.message || 'Something went wrong.');
@@ -787,14 +1223,18 @@ Respond with ONLY valid JSON in this exact shape:
   "category_reason": "One sentence explaining why this category fits.",
   "hook_suggestion": "A short on-screen text hook (under 8 words) to overlay in the first 1.5 seconds for maximum retention.",
   "pinned_comment": "A short pinned-comment idea that drives reply engagement (a question is best).",
-  "thumbnail_idea": "One sentence describing a high-curiosity custom thumbnail concept."
+  "thumbnail_idea": "One sentence describing a high-curiosity custom thumbnail concept.",
+  "thumbnail_topic_title": "A punchy 2-4 word ALL CAPS hook title for the thumbnail that captures the script's most surprising or curiosity-driving fact (e.g. 'BANANAS ARE BERRIES', 'HONEY NEVER SPOILS', 'OCTOPUSES HAVE 3 HEARTS'). It should imply a punchline without giving away the full answer.",
+  "thumbnail_visual_subject": "A vivid one-line description of the hero subject for the thumbnail illustration. ONE clear object or character only, with personality details. Examples: 'a giant glossy yellow banana with a surprised cartoon face and big eyes', 'a dripping honey jar with a cartoon bee floating above looking shocked', 'a cartoon octopus with three visible glowing hearts through its body'."
 }
 
 Requirements:
 - title_primary: punchy, curiosity-driven, includes the main keyword/named entity, at most 1 emoji
 - title_alternatives: 3 stylistically different alternatives (one with numbers, one emotional, one question)
 - tags: 25-30 tags, comma-free, mixing broad terms, named entities, niche-specific phrases, and long-tail search queries
-- description: minimum 90 words of context before the CTA. Include 15-20 hashtags at the end.`;
+- description: minimum 90 words of context before the CTA. Include 15-20 hashtags at the end.
+- thumbnail_topic_title: MUST be 2-4 words, ALL CAPS, punchy and surprising. This is the main hook text on the thumbnail.
+- thumbnail_visual_subject: MUST describe a single hero subject (one object/character) with personality. No scenes, no multiple objects.`;
 
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -806,7 +1246,7 @@ Requirements:
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-5',
-      max_tokens: 2000,
+      max_tokens: 2600,
       system: systemPrompt,
       messages: [{ role: 'user', content: userPrompt }]
     })
@@ -858,6 +1298,141 @@ function renderResult(r) {
 
   const titleLen = (r.title_primary || '').length;
   const lenColor = titleLen <= 60 ? 'var(--good)' : 'var(--bad)';
+
+  // ============ Build Brain Morsel Thumbnail Prompt ============
+  const topicTitle = (r.thumbnail_topic_title || '').toUpperCase().trim();
+  const visualSubject = (r.thumbnail_visual_subject || '').trim();
+  let thumbBlockHTML = '';
+
+  if (topicTitle && visualSubject) {
+    // Locked brand layer — identical across all 4 styles
+    const lockedBrandLayer = `TEXT OVERLAY (THREE-TIER HIERARCHY — IDENTICAL ACROSS ALL EPISODES):
+- TOP (small): "THE BRAIN MORSEL" on a single horizontal line in clean bold sans-serif, white with thick black outline (2-3px). Small size — this is the channel signature, not the hook.
+
+- MIDDLE (LARGEST, the main hook): "${topicTitle}" in massive bold comic display font (Bangers or similar), bright yellow (#FFD93D) with thick black outline (5-6px) and magenta/red drop shadow. This is the biggest text on the thumbnail — it should dominate. All caps, with slight tilt for energy. Place it where it doesn't cover the subject's face.
+
+- BOTTOM (medium): "WAIT, WHAT?!" in punchy comic display font, white or light cyan with thick black outline (4-5px), slight tilt. Smaller than the topic title but still bold and readable.
+
+BACKGROUND: Vibrant background — diagonal split or radial burst pattern using deep teal (#1A6B7A) and warm orange (#FF8C42), with action burst lines or rays radiating from behind the subject for dynamic energy.
+
+LOCKED COLOR PALETTE: Teal (#1A6B7A), warm orange (#FF8C42), bright yellow (#FFD93D), white, magenta (#E91E63) for drop shadows, deep black (#0F0F0F) for outlines.
+
+COMPOSITION: Clear three-tier text hierarchy — channel name (small/top), topic title (LARGEST/middle), tagline (medium/bottom). Subject illustration weaves between the text layers. Mobile-optimized — all text readable at small sizes.
+
+ASPECT RATIO: 9:16 vertical (1080x1920px equivalent)`;
+
+    // 4 art-style variants — only the illustration approach changes
+    const styles = {
+      comic: {
+        label: 'Comic',
+        icon: '💥',
+        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "The Brain Morsel" channel, a fun facts series about everyday topics. Bold comic book illustration style.
+
+ART STYLE: Bold comic book / cartoon illustration style with thick black ink outlines (3-5px), flat cel-shaded coloring with hard shadow blocks, halftone dot patterns in shadow areas, and vibrant saturated colors. Inspired by modern comic art and pop-art posters — think Spider-Verse meets vintage Sunday comics. Slightly exaggerated proportions for visual punch.
+
+SUBJECT: A bold, eye-catching hero illustration of ${visualSubject}, centered in the middle of the frame. Drawn in comic style with thick black outlines, dynamic angle, slight exaggeration for personality, and dramatic cel-shaded lighting. The subject should feel alive and pop off the page.
+
+STYLE EFFECTS:
+- Radiating action lines or speed lines emanating from behind the subject
+- A small "WOW!" or "POW!" style comic burst near the subject (small, not overpowering)
+- Halftone dot texture in the background and shadow areas
+- Sparkle/star bursts for "aha moment" energy
+
+${lockedBrandLayer}`
+      },
+      retro: {
+        label: 'Retro Game',
+        icon: '🕹️',
+        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "The Brain Morsel" channel, a fun facts series about everyday topics. Retro pixel-art video game style.
+
+ART STYLE: 16-bit / 32-bit retro pixel art illustration style, reminiscent of late-90s SNES and early arcade games. Crisp pixel edges, limited but vibrant color palette per element, dithered shading, slight CRT scanline texture overlay, and chunky pixel-perfect outlines. Think Streets of Rage meets Hotline Miami — moody but punchy.
+
+SUBJECT: A pixel-art hero rendering of ${visualSubject}, centered in the middle of the frame. Rendered as detailed sprite art with bold outlines, dramatic pixel-shaded lighting, and exaggerated personality. Slight 3/4 angle for depth. The pixelation should be visible but refined, not blocky/Minecraft-style.
+
+STYLE EFFECTS:
+- Pixel-art sparkle/star icons and small "+10 EXP" or "!" pop-ups floating near the subject
+- Subtle horizontal CRT scanlines across the entire image
+- Pixel-art radial burst or "speed pixels" trailing behind the subject
+- Faint pixel-art neon glow around the subject for that arcade-cabinet feel
+
+${lockedBrandLayer}`
+      },
+      minecraft: {
+        label: 'Minecraft',
+        icon: '🟫',
+        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "The Brain Morsel" channel, a fun facts series about everyday topics. Minecraft / voxel block style.
+
+ART STYLE: Minecraft-inspired voxel block art style — everything constructed from chunky 3D cube blocks with distinct pixel textures on each face. Bright daylight rendering with soft shadows. Clean geometric edges, blocky construction, characteristic Minecraft texture patterns (dirt, stone, wood grain). Think official Minecraft promotional art quality, not low-effort blocky.
+
+SUBJECT: A voxel/blocky hero rendering of ${visualSubject}, centered in the middle of the frame. Built from cube blocks with characteristic Minecraft texture details, slight 3/4 isometric angle for depth, exaggerated proportions to convey personality through the block constraints. The subject should be instantly readable as the topic even in block form.
+
+STYLE EFFECTS:
+- Floating block particles or sparkle cubes near the subject
+- A small floating "!" speech bubble or experience-orb-style glow
+- Soft cube-shaped lighting rays in the background
+- Cloud blocks or particle effects radiating energy from behind the subject
+
+${lockedBrandLayer}`
+      },
+      simple: {
+        label: 'Simple Comic',
+        icon: '✏️',
+        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "The Brain Morsel" channel, a fun facts series about everyday topics. Simple modern flat cartoon style.
+
+ART STYLE: Clean modern flat cartoon illustration style — soft rounded shapes, minimal black outlines (1-2px or no outlines), flat solid colors with subtle gradient highlights, no halftone or texture. Friendly, approachable, slightly stylized like a high-end children's book or modern animated explainer (think Headspace, Duolingo, or Pixar's flat-illustration phase). Big expressive eyes, simplified anatomy, warm and inviting.
+
+SUBJECT: A simple flat-cartoon hero illustration of ${visualSubject}, centered in the middle of the frame. Drawn with rounded soft shapes, big expressive personality, gentle highlights for dimension, and clean flat colors. The subject should feel cute and friendly, not intense.
+
+STYLE EFFECTS:
+- Small simple sparkles, dots, or geometric shapes (circles, stars) floating around the subject
+- Soft simplified light rays in the background
+- A small simple thought-bubble or "!" icon for curiosity
+- Clean, uncluttered — let the subject and topic title carry the energy
+
+${lockedBrandLayer}`
+      }
+    };
+
+    const styleKeys = Object.keys(styles);
+    const pillsHTML = styleKeys.map((k, i) => `
+      <button class="style-pill ${i === 0 ? 'active' : ''}" data-style="${k}">
+        <span class="pill-icon">${styles[k].icon}</span>${styles[k].label}
+      </button>
+    `).join('');
+
+    // Stash prompts on a global for the click handler
+    window.__thumbStyles = styles;
+    window.__thumbCurrentStyle = 'comic';
+
+    thumbBlockHTML = `
+    <div class="seo-section">
+      <div class="seo-section-head">
+        <div class="label">Brain Morsel Thumbnail</div>
+        <button class="copy-btn" id="thumbCopyBtn" data-copy="${escapeHTML(styles.comic.prompt)}">Copy prompt</button>
+      </div>
+      <div class="seo-section-body">
+        <div class="thumb-block">
+          <div class="thumb-topic">
+            <div>
+              <div class="thumb-topic-label">Topic Title (the hook)</div>
+              <div class="thumb-topic-text">${escapeHTML(topicTitle)}</div>
+            </div>
+            <button class="copy-btn" data-copy="${escapeHTML(topicTitle)}">Copy title</button>
+          </div>
+          <div class="thumb-style-bar" id="thumbStyleBar">
+            ${pillsHTML}
+          </div>
+          <div class="thumb-prompt-wrap">
+            <div class="thumb-prompt-head">
+              <div class="label">Full image-gen prompt (9:16) · <span id="thumbStyleLabel" style="color:var(--accent)">Comic</span></div>
+            </div>
+            <div class="thumb-prompt-text" id="thumbPromptText">${escapeHTML(styles.comic.prompt)}</div>
+            <div class="thumb-hint">Pick the art style that matches your video. Brand layer (channel name, "WAIT, WHAT?!", palette &amp; layout) stays locked — only the illustration style changes.</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
 
   out.innerHTML = `
     <!-- TITLE -->
@@ -924,6 +1499,9 @@ function renderResult(r) {
         ${r.thumbnail_idea ? `<div class="tip"><strong>🖼️ Custom thumbnail:</strong> ${escapeHTML(r.thumbnail_idea)}</div>` : ''}
       </div>
     </div>
+
+    <!-- THUMBNAIL PROMPT (Brain Morsel) -->
+    ${thumbBlockHTML}
   `;
 
   // Attach copy handlers
@@ -944,6 +1522,44 @@ function renderResult(r) {
       }
     });
   });
+
+  // Attach style-pill handlers (thumbnail style switcher)
+  const styleBar = document.getElementById('thumbStyleBar');
+  if (styleBar && window.__thumbStyles) {
+    styleBar.querySelectorAll('.style-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const key = pill.getAttribute('data-style');
+        const style = window.__thumbStyles[key];
+        if (!style) return;
+
+        // Toggle active state
+        styleBar.querySelectorAll('.style-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+
+        // Update prompt text & label
+        document.getElementById('thumbPromptText').textContent = style.prompt;
+        document.getElementById('thumbStyleLabel').textContent = style.label;
+
+        // Update copy button's data-copy attribute
+        const copyBtn = document.getElementById('thumbCopyBtn');
+        if (copyBtn) {
+          copyBtn.setAttribute('data-copy', style.prompt);
+        }
+
+        window.__thumbCurrentStyle = key;
+
+        // Update saved item's style preference if we have one
+        if (currentItemId) {
+          const items = getHistory();
+          const idx = items.findIndex(it => it.id === currentItemId);
+          if (idx >= 0) {
+            items[idx].styleKey = key;
+            saveHistory(items);
+          }
+        }
+      });
+    });
+  }
 }
 </script>
 
