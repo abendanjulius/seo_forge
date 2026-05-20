@@ -586,6 +586,35 @@
   }
   .tip strong { color: var(--ink); }
 
+  /* ============ MAIN KEYWORD BADGE ============ */
+  .keyword-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, rgba(255, 87, 34, 0.15), rgba(255, 184, 0, 0.08));
+    border: 1px solid rgba(255, 87, 34, 0.35);
+    padding: 6px 12px;
+    border-radius: 100px;
+    margin-bottom: 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .keyword-badge .kw-label {
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 9px;
+  }
+  .keyword-badge .kw-value {
+    color: var(--accent);
+    font-weight: 700;
+    font-family: var(--sans);
+    font-size: 13px;
+  }
+  .keyword-badge .kw-pin {
+    font-size: 11px;
+  }
+
   /* ============ COMMENT CARDS (pinned + alt-account) ============ */
   .comment-card {
     background: var(--bg-2);
@@ -1186,7 +1215,7 @@ const LOADING_MSGS = [
   'Reading script & extracting hook',
   'Brewing curiosity-driven titles',
   'Crafting keyword-rich description',
-  'Mining tags & hashtags',
+  'Picking 6 high-traffic tags',
   'Designing Brain Morsel thumbnail',
   'Polishing optimization tips'
 ];
@@ -1255,7 +1284,7 @@ async function generateSEO(script, niche) {
 You understand:
 - YouTube's algorithm rewards curiosity hooks, retention, and engagement signals
 - Titles under 60 chars perform best on mobile; emotional/numerical hooks beat dry descriptions
-- Descriptions should front-load context, use natural keyword density (not stuffing), and end with a CTA + hashtags
+- Descriptions should front-load context and use natural keyword density (not stuffing). NO hashtag block at the end of the description — hashtags go on the title only.
 - Tags help with related-video surfacing; mix broad + specific + long-tail
 - Category choice influences which recommendation cluster the video lands in
 
@@ -1270,10 +1299,13 @@ ${script}
 Respond with ONLY valid JSON in this exact shape:
 
 {
-  "title_primary": "Main title under 60 chars, with at most 1 emoji",
-  "title_alternatives": ["Alt 1", "Alt 2", "Alt 3"],
-  "description": "Full YouTube description: 2-3 short paragraphs of context with natural keyword density, then a CTA line starting with '🔔 Subscribe...', then a blank line, then 15-20 relevant hashtags. Use real line breaks (\\n). End every paragraph with proper punctuation.",
-  "tags": ["tag1", "tag2", "..."],
+  "main_keyword": "The single most important keyword/phrase for this video (1-3 words, lowercase). This MUST appear in: (1) the start of the title, (2) the description prose 2-3 times naturally, and (3) the tags array. Example: for a banana video → 'banana'. For an octopus heart video → 'octopus hearts'.",
+  "title_primary": "Title under 60 chars TOTAL (including the 3 hashtags appended at the end). Format: '[Main Keyword] [curiosity hook] #nicheHashtag #broadHashtag #shorts'. The main keyword MUST appear at the very start of the title. Then a punchy curiosity hook. Then exactly 3 hashtags appended at the end: 1 niche-specific + 1 broad + #shorts. Example: 'Banana: You'll Never Guess What It Actually Is 🍌 #funfacts #didyouknow #shorts'. At most 1 emoji. Keep the title TIGHT — under 60 chars including hashtags so it doesn't truncate on mobile.",
+  "title_alternatives": ["Alt 1 (same format: keyword first + hook + 3 hashtags)", "Alt 2 (same format)", "Alt 3 (same format)"],
+  "niche_hashtag": "A single niche-specific hashtag (lowercase, no #, single word or camelCase) directly tied to the SPECIFIC subject of THIS video. CRITICAL: Only pick a hashtag you have high confidence is ACTIVELY USED on YouTube with thousands of existing videos under it. Do NOT invent hashtags or pick obscure variants. If in doubt, choose a slightly broader well-established hashtag over a precise but unused one. Examples of well-established niche hashtags: 'funfacts', 'historyfacts', 'sciencefacts', 'spacefacts', 'foodfacts', 'animalfacts', 'oceananimals', 'spacefacts', 'mythology', 'psychologyfacts', 'bodyfacts', 'natureislit', 'weirdhistory'. Pick the one most relevant to the video topic from established hashtags like these.",
+  "broad_hashtag": "A single BROAD but TOPIC-RELEVANT hashtag (lowercase, no #, single word or camelCase). CRITICAL: Only pick from hashtags you have high confidence have MILLIONS of existing videos on YouTube. Well-established broad hashtags for the facts/educational niche include: 'didyouknow', 'facts', 'mindblown', 'trivia', 'education', 'amazingfacts', 'crazyfacts', 'interestingfacts', 'knowledge', 'learning'. Pick the one most semantically relevant to the video's wider category. NEVER use: 'fyp', 'viral', 'trending', 'foryou', 'reels', 'shorts' (since #shorts is already added separately), or any invented/obscure hashtag. The hashtag must be one a viewer browsing it would expect to find this video's topic in.",
+  "description": "Full YouTube description: 2-3 short paragraphs of context that NATURALLY include the main keyword 2-3 times for keyword density (do NOT keyword-stuff). End with a CTA line starting with '🔔 Subscribe...'. DO NOT add any hashtag block at the end. Use real line breaks (\\n). End every paragraph with proper punctuation.",
+  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6"],
   "category": "One of: Science & Technology | Education | Entertainment | People & Blogs | Howto & Style | News & Politics | Sports | Gaming | Comedy | Music | Film & Animation",
   "category_reason": "One sentence explaining why this category fits.",
   "hook_suggestion": "A short on-screen text hook (under 8 words) to overlay in the first 1.5 seconds for maximum retention.",
@@ -1285,10 +1317,18 @@ Respond with ONLY valid JSON in this exact shape:
 }
 
 Requirements:
-- title_primary: punchy, curiosity-driven, includes the main keyword/named entity, at most 1 emoji
-- title_alternatives: 3 stylistically different alternatives (one with numbers, one emotional, one question)
-- tags: 25-30 tags, comma-free, mixing broad terms, named entities, niche-specific phrases, and long-tail search queries
-- description: minimum 90 words of context before the CTA. Include 15-20 hashtags at the end.
+- main_keyword: the SAME keyword/phrase must appear in the title (at the start), in the description prose (2-3 times naturally), and as one of the tags. Keyword consistency across these 3 surfaces is critical for SEO.
+- title_primary: MUST start with the main keyword, MUST be under 60 chars TOTAL including the 3 appended hashtags, MUST end with '#[niche] #[broad] #shorts'. At most 1 emoji.
+- title_alternatives: 3 stylistically different alternatives, each following the exact same format (keyword-first + hook + 3 hashtags), each under 60 chars total.
+- niche_hashtag & broad_hashtag: lowercase, no '#' prefix, single word or camelCase. CRITICAL: Only pick hashtags you have HIGH CONFIDENCE are actively used on YouTube with significant existing video volume. Do NOT invent new hashtags or use obscure variants. Prefer a well-established but slightly less precise hashtag over a precise but uncommonly-used one. BOTH must be directly related to the video's actual topic. Never use 'fyp', 'viral', 'trending', 'foryou', 'reels' as the broad hashtag. A viewer browsing the broad hashtag should reasonably expect to find this video.
+- tags: EXACTLY 6 tags. No more, no less. Each tag MUST be a high-traffic keyword/search term that real viewers actively search on YouTube. CRITICAL constraints for tags:
+  1. The main_keyword MUST be included as one of the 6 tags.
+  2. Each tag should be a real search query — a phrase a viewer would type into the search bar (e.g. 'did you know facts', 'fun facts about bananas', 'shorts facts'). NOT random words.
+  3. Only include tags you have HIGH CONFIDENCE have significant search volume on YouTube. Prefer well-established broad searches over precise but low-volume long-tails.
+  4. Mix: 1-2 broad high-volume tags (e.g. 'shorts', 'facts'), 2-3 niche-specific search terms (e.g. 'fun facts about [topic]', '[topic] facts'), 1-2 named-entity or specific search queries tied to the video.
+  5. Tags must be lowercase, no '#' prefix, no commas inside a tag. Spaces are fine for multi-word search terms.
+  6. NO duplicates or near-duplicates (e.g. don't list both 'banana facts' and 'facts about bananas').
+- description: minimum 90 words of context. Main keyword appears 2-3 times naturally in the prose. End with the CTA. DO NOT include any hashtag block at the end.
 - thumbnail_topic_title: MUST be 2-5 words, ALL CAPS, and CREATE a curiosity gap rather than reveal the fact. The viewer should feel they need to click to learn the answer. Use rhetorical questions, vague references ('THIS', 'THE ONE THING'), implied contradictions, or surprise framing. NEVER state the actual fact in the title.
 - thumbnail_visual_subject: MUST describe a single hero subject (one object/character) with personality. No scenes, no multiple objects.`;
 
@@ -1529,6 +1569,19 @@ ${lockedBrandLayer}`
   }
 
   out.innerHTML = `
+    ${r.main_keyword ? `
+      <div style="margin-bottom: 16px;">
+        <div class="keyword-badge">
+          <span class="kw-pin">🎯</span>
+          <span class="kw-label">Main Keyword</span>
+          <span class="kw-value">${escapeHTML(r.main_keyword)}</span>
+        </div>
+        <div style="font-family: var(--mono); font-size: 10px; color: var(--ink-mute); margin-top: -4px; padding-left: 4px;">
+          ↳ used in title, description &amp; tags
+        </div>
+      </div>
+    ` : ''}
+
     <!-- TITLE -->
     <div class="seo-section">
       <div class="seo-section-head">
@@ -1538,7 +1591,7 @@ ${lockedBrandLayer}`
       <div class="seo-section-body">
         <div class="title-main">${escapeHTML(r.title_primary || '')}</div>
         <div class="title-meta">
-          <span style="color:${lenColor}">${titleLen} chars</span> · max 60 recommended
+          <span style="color:${lenColor}">${titleLen} chars</span> · max 60 incl. hashtags
         </div>
         ${altsHTML ? `
           <div class="alternatives">
@@ -1563,7 +1616,7 @@ ${lockedBrandLayer}`
     <!-- TAGS -->
     <div class="seo-section">
       <div class="seo-section-head">
-        <div class="label">Tags (${(r.tags || []).length})</div>
+        <div class="label">Top Tags (${(r.tags || []).length}/6) · high-traffic</div>
         <button class="copy-btn" data-copy="${escapeHTML(tagsString)}">Copy all</button>
       </div>
       <div class="seo-section-body">
