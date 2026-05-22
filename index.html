@@ -747,6 +747,75 @@
     line-height: 1.5;
   }
 
+  /* Text Overlay panel */
+  .overlay-panel {
+    padding: 14px 16px;
+    background: rgba(255, 184, 0, 0.07);
+    border-bottom: 1px solid rgba(255, 87, 34, 0.2);
+  }
+  .overlay-panel-head {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-2);
+    margin-bottom: 12px;
+  }
+  .overlay-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .overlay-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .overlay-tier { flex: 1; min-width: 0; }
+  .overlay-tier-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-mute);
+  }
+  .overlay-tier-text {
+    font-family: var(--display);
+    font-weight: 900;
+    letter-spacing: 0.01em;
+    line-height: 1.15;
+    margin-top: 3px;
+    word-break: break-word;
+  }
+  .overlay-tier-text.overlay-brand {
+    font-size: 16px;
+    color: var(--ink);
+    text-transform: uppercase;
+  }
+  .overlay-tier-text.overlay-hook {
+    font-size: 19px;
+    display: inline-block;
+    background: var(--accent-2);
+    color: #0f0f0f;
+    padding: 3px 9px;
+    border-radius: 5px;
+  }
+  .overlay-hint {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mute);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  .overlay-copy-both {
+    margin-top: 10px;
+  }
+
   /* Style selector pills */
   .thumb-style-bar {
     display: flex;
@@ -952,7 +1021,7 @@
         <span class="meta" id="wordCount">0 words</span>
       </div>
       <div class="panel-body">
-        <textarea id="script" placeholder="Did you know that Elon Musk almost lost everything trying to build SpaceX?&#10;&#10;After selling PayPal, he poured about 100 million dollars into rockets, even as the first three launches failed..."></textarea>
+        <textarea id="script" placeholder="In 2000, Blockbuster could have bought Netflix for fifty million dollars.&#10;&#10;They laughed them out of the room. Netflix was bleeding money, mailing DVDs in envelopes..."></textarea>
 
         <div class="controls">
           <div class="select-wrap">
@@ -1213,10 +1282,10 @@ renderHistory();
 // ============ GENERATION ============
 const LOADING_MSGS = [
   'Reading script & extracting hook',
-  'Brewing curiosity-driven titles',
+  'Forging curiosity-driven titles',
   'Crafting keyword-rich description',
   'Picking 6 high-traffic tags',
-  'Designing Brain Morsel thumbnail',
+  'Designing the thumbnail package',
   'Polishing optimization tips'
 ];
 
@@ -1312,8 +1381,9 @@ Respond with ONLY valid JSON in this exact shape:
   "pinned_comment": "A short pinned-comment idea that drives reply engagement (a question is best).",
   "alt_account_comment": "A short 'mind-blown reaction' comment to post from a secondary account. It should sound like a genuine viewer who just learned something wild — NOT a question, NOT inviting a reply from the creator. Casual, conversational, 1-2 sentences. Examples of tone: 'Bro the part about [X] actually broke my brain', 'Wait, I genuinely never knew this — going to annoy my friends with it now lol', 'The [specific detail] thing got me 😭 mind = blown'. It should tease ONE specific surprising detail from the script to entice comment-readers, without spoiling the full answer. Use casual lowercase, light slang, maybe one emoji.",
   "thumbnail_idea": "One sentence describing a high-curiosity custom thumbnail concept.",
-  "thumbnail_topic_title": "A punchy 2-5 word ALL CAPS curiosity-hook title for the thumbnail. CRITICAL: This must CREATE a curiosity gap, NOT reveal the answer. The viewer should feel they HAVE TO click to find out what's going on. Do NOT state the fact — tease it. Good examples (hook + withholds answer): 'WAIT… BANANAS ARE WHAT?', 'THIS FOOD CAN'T DIE', 'WHY OCTOPUSES ARE BUILT WRONG', 'THE ONLY ANIMAL THAT CAN'T DO THIS', 'YOUR COFFEE IS LYING TO YOU', 'NOBODY TELLS YOU THIS ABOUT EGGS'. Bad examples (gives away the fact, no reason to click): 'BANANAS ARE BERRIES', 'HONEY NEVER SPOILS', 'OCTOPUSES HAVE 3 HEARTS'. Techniques to use: rhetorical questions ('BANANAS ARE WHAT?'), vague references ('THIS', 'THE ONE THING'), implied contradictions ('BUILT WRONG', 'LYING TO YOU'), or 'nobody/everyone' framing. Punctuation like '?', '…', or '!' is encouraged for energy.",
-  "thumbnail_visual_subject": "A vivid one-line description of the hero subject for the thumbnail illustration. ONE clear object or character only, with personality details. Examples: 'a giant glossy yellow banana with a surprised cartoon face and big eyes', 'a dripping honey jar with a cartoon bee floating above looking shocked', 'a cartoon octopus with three visible glowing hearts through its body'."
+  "thumbnail_overlay_brand": "The brand, company, or subject name that goes in the TOP tier of the thumbnail overlay. ALL CAPS, 1-3 words. This is the recognizable name viewers will instantly know. Examples: 'SEARS', 'BLOCKBUSTER', 'TOYS R US', 'NOKIA', 'LEHMAN BROTHERS'.",
+  "thumbnail_topic_title": "A punchy 3-6 word ALL CAPS hook for the thumbnail's main box (the BOTTOM tier). This is for a business/empire-collapse channel — the tone is DECLARATIVE and ominous, like a true-crime documentary, NOT a trivia question. State a dramatic, intriguing claim that creates a curiosity gap about HOW or WHY it happened. Good examples: 'HE BOUGHT IT TO KILL IT', 'THEY LAUGHED AT NETFLIX', 'AMAZON DIDN'T KILL IT', 'TOO PROUD TO ADAPT', '$250 BILLION GONE', 'THE $50M MISTAKE'. Bad examples (too trivia-style or gives everything away): 'WAIT… SEARS IS WHAT?', 'SEARS WENT BANKRUPT IN 2018'. The hook should make the viewer NEED to know the story behind it.",
+  "thumbnail_visual_subject": "A vivid one-line description of the hero subject for the thumbnail illustration — a person, product, or scene tied to this collapse story. Examples: 'a cold-eyed middle-aged executive in an expensive grey suit standing in front of a corporate building', 'an early-2000s mobile phone shattering against a glass office backdrop', 'an empty retail store aisle with a going-out-of-business sign'."
 }
 
 Requirements:
@@ -1329,8 +1399,9 @@ Requirements:
   5. Tags must be lowercase, no '#' prefix, no commas inside a tag. Spaces are fine for multi-word search terms.
   6. NO duplicates or near-duplicates (e.g. don't list both 'banana facts' and 'facts about bananas').
 - description: minimum 90 words of context. Main keyword appears 2-3 times naturally in the prose. End with the CTA. DO NOT include any hashtag block at the end.
-- thumbnail_topic_title: MUST be 2-5 words, ALL CAPS, and CREATE a curiosity gap rather than reveal the fact. The viewer should feel they need to click to learn the answer. Use rhetorical questions, vague references ('THIS', 'THE ONE THING'), implied contradictions, or surprise framing. NEVER state the actual fact in the title.
-- thumbnail_visual_subject: MUST describe a single hero subject (one object/character) with personality. No scenes, no multiple objects.`;
+- thumbnail_overlay_brand: MUST be the recognizable brand/company/subject name, ALL CAPS, 1-3 words.
+- thumbnail_topic_title: MUST be 3-6 words, ALL CAPS, DECLARATIVE (not a trivia question). Dramatic true-crime-documentary tone. State an intriguing claim that makes the viewer need to know HOW or WHY it happened. NEVER use a "WAIT… X IS WHAT?" trivia format.
+- thumbnail_visual_subject: MUST describe a single hero subject (one person, product, or scene) tied to the collapse story.`;
 
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -1433,95 +1504,94 @@ function renderResult(r) {
     </div>`;
   }
 
-  // ============ Build Brain Morsel Thumbnail Prompt ============
+  // ============ Build How Empires Fell Thumbnail Package ============
+  const overlayBrand = (r.thumbnail_overlay_brand || '').toUpperCase().trim();
   const topicTitle = (r.thumbnail_topic_title || '').toUpperCase().trim();
   const visualSubject = (r.thumbnail_visual_subject || '').trim();
   let thumbBlockHTML = '';
 
   if (topicTitle && visualSubject) {
-    // Locked brand layer — identical across all 4 styles
-    const lockedBrandLayer = `TEXT OVERLAY (THREE-TIER HIERARCHY — IDENTICAL ACROSS ALL EPISODES):
-- TOP (small): "THE BRAIN MORSEL" on a single horizontal line in clean bold sans-serif, white with thick black outline (2-3px). Small size — this is the channel signature, not the hook.
+    // Locked brand layer — identical across all styles
+    const lockedBrandLayer = `TEXT OVERLAY (TWO-TIER HIERARCHY — IDENTICAL ACROSS ALL EPISODES):
+- TOP TIER (brand name): "${overlayBrand}" in bold condensed display font, white with a thick navy outline (3-4px). Sits in the lower third of the frame, directly above the hook box. This is the recognizable company/subject name.
 
-- MIDDLE (LARGEST, the main hook): "${topicTitle}" in massive bold comic display font (Bangers or similar), bright yellow (#FFD93D) with thick black outline (5-6px) and magenta/red drop shadow. This is the biggest text on the thumbnail — it should dominate. All caps, with slight tilt for energy. Place it where it doesn't cover the subject's face.
+- BOTTOM TIER (the main hook): "${topicTitle}" inside a solid gold/amber (#D4AF37) rounded box, black bold condensed text with a thin white inner stroke for readability. Slight tilt for energy. This box sits directly below the brand name in the lower third. It is the dominant hook — make it punchy and readable at small sizes.
 
-- BOTTOM (medium): "WAIT, WHAT?!" in punchy comic display font, white or light cyan with thick black outline (4-5px), slight tilt. Smaller than the topic title but still bold and readable.
+BACKGROUND: Cinematic, dramatic, desaturated. Deep navy blue tones with strategic gold/amber lighting accents and rich shadows. Documentary-grade mood — serious, ominous, prestigious.
 
-BACKGROUND: Vibrant background — diagonal split or radial burst pattern using deep teal (#1A6B7A) and warm orange (#FF8C42), with action burst lines or rays radiating from behind the subject for dynamic energy.
+LOCKED COLOR PALETTE: Deep navy (#0F1E3D), metallic gold/amber (#D4AF37), muted slate, white, deep black (#0F0F0F) for outlines. Desaturated overall with gold as the only warm pop.
 
-LOCKED COLOR PALETTE: Teal (#1A6B7A), warm orange (#FF8C42), bright yellow (#FFD93D), white, magenta (#E91E63) for drop shadows, deep black (#0F0F0F) for outlines.
-
-COMPOSITION: Clear three-tier text hierarchy — channel name (small/top), topic title (LARGEST/middle), tagline (medium/bottom). Subject illustration weaves between the text layers. Mobile-optimized — all text readable at small sizes.
+COMPOSITION: Subject illustration occupies the upper two-thirds of the frame, face/key detail clearly visible and NOT covered by text. Two-tier text overlay (brand name + gold hook box) anchored in the lower third, centered, with at least 16px padding from all edges. Mobile-optimized — all text readable at thumbnail size.
 
 ASPECT RATIO: 9:16 vertical (1080x1920px equivalent)`;
 
-    // 4 art-style variants — only the illustration approach changes
+    // Art-style variants — only the illustration approach changes
     const styles = {
       comic: {
-        label: 'Comic',
-        icon: '💥',
-        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "The Brain Morsel" channel, a fun facts series about everyday topics. Bold comic book illustration style.
+        label: 'Cinematic Comic',
+        icon: '🎬',
+        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "How Empires Fell", a cinematic business-documentary channel about the collapse of famous companies and brands. Cinematic comic book illustration style.
 
-ART STYLE: Bold comic book / cartoon illustration style with thick black ink outlines (3-5px), flat cel-shaded coloring with hard shadow blocks, halftone dot patterns in shadow areas, and vibrant saturated colors. Inspired by modern comic art and pop-art posters — think Spider-Verse meets vintage Sunday comics. Slightly exaggerated proportions for visual punch.
+ART STYLE: Cinematic graphic-novel illustration with dramatic lighting, rich shadows, and bold clean ink outlines. Muted, desaturated palette with strategic gold and navy tones. Serious, prestigious, documentary mood — think a Sin City / Walking Dead comic crossed with a Netflix business documentary title card. Realistic adult proportions, no cartoonish or playful elements.
 
-SUBJECT: A bold, eye-catching hero illustration of ${visualSubject}, centered in the middle of the frame. Drawn in comic style with thick black outlines, dynamic angle, slight exaggeration for personality, and dramatic cel-shaded lighting. The subject should feel alive and pop off the page.
+SUBJECT: A bold, dramatic illustration of ${visualSubject}, positioned in the upper two-thirds of the frame. Drawn in cinematic comic style with dramatic cel-shaded lighting, serious tone, and a clear focal point. The subject should feel weighty and consequential.
 
 STYLE EFFECTS:
-- Radiating action lines or speed lines emanating from behind the subject
-- A small "WOW!" or "POW!" style comic burst near the subject (small, not overpowering)
-- Halftone dot texture in the background and shadow areas
-- Sparkle/star bursts for "aha moment" energy
+- Dramatic directional lighting and long shadows
+- Subtle volumetric light or haze for cinematic depth
+- Desaturated background with gold rim-lighting on the subject
+- Restrained, serious — no comic bursts, no sparkles, no playful effects
 
 ${lockedBrandLayer}`
       },
-      retro: {
-        label: 'Retro Game',
-        icon: '🕹️',
-        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "The Brain Morsel" channel, a fun facts series about everyday topics. Retro pixel-art video game style.
+      documentary: {
+        label: 'Documentary',
+        icon: '🎞️',
+        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "How Empires Fell", a cinematic business-documentary channel about the collapse of famous companies and brands. Realistic documentary illustration style.
 
-ART STYLE: 16-bit / 32-bit retro pixel art illustration style, reminiscent of late-90s SNES and early arcade games. Crisp pixel edges, limited but vibrant color palette per element, dithered shading, slight CRT scanline texture overlay, and chunky pixel-perfect outlines. Think Streets of Rage meets Hotline Miami — moody but punchy.
+ART STYLE: Photorealistic, cinematic documentary rendering with painterly atmosphere. Deep navy and slate tones, dramatic golden-hour or single-source lighting, film-grain texture. The look of a prestige documentary key-art still — grounded, serious, archival.
 
-SUBJECT: A pixel-art hero rendering of ${visualSubject}, centered in the middle of the frame. Rendered as detailed sprite art with bold outlines, dramatic pixel-shaded lighting, and exaggerated personality. Slight 3/4 angle for depth. The pixelation should be visible but refined, not blocky/Minecraft-style.
+SUBJECT: A realistic, cinematic rendering of ${visualSubject}, positioned in the upper two-thirds of the frame, lit dramatically with a clear focal point. Period-accurate detail where relevant.
 
 STYLE EFFECTS:
-- Pixel-art sparkle/star icons and small "+10 EXP" or "!" pop-ups floating near the subject
-- Subtle horizontal CRT scanlines across the entire image
-- Pixel-art radial burst or "speed pixels" trailing behind the subject
-- Faint pixel-art neon glow around the subject for that arcade-cabinet feel
+- Cinematic depth of field, subtle film grain
+- Single dramatic light source with deep shadow falloff
+- Desaturated, archival color grade with gold accent lighting
+- Serious and grounded — no illustration gimmicks
 
 ${lockedBrandLayer}`
       },
-      minecraft: {
-        label: 'Minecraft',
-        icon: '🟫',
-        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "The Brain Morsel" channel, a fun facts series about everyday topics. Minecraft / voxel block style.
+      noir: {
+        label: 'Corporate Noir',
+        icon: '🌑',
+        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "How Empires Fell", a cinematic business-documentary channel about the collapse of famous companies and brands. High-contrast noir illustration style.
 
-ART STYLE: Minecraft-inspired voxel block art style — everything constructed from chunky 3D cube blocks with distinct pixel textures on each face. Bright daylight rendering with soft shadows. Clean geometric edges, blocky construction, characteristic Minecraft texture patterns (dirt, stone, wood grain). Think official Minecraft promotional art quality, not low-effort blocky.
+ART STYLE: High-contrast film-noir illustration — deep blacks, hard chiaroscuro lighting, dramatic silhouettes and shafts of light. Navy-and-gold limited palette. Tense, ominous, conspiratorial mood, like the poster for a corporate-thriller film.
 
-SUBJECT: A voxel/blocky hero rendering of ${visualSubject}, centered in the middle of the frame. Built from cube blocks with characteristic Minecraft texture details, slight 3/4 isometric angle for depth, exaggerated proportions to convey personality through the block constraints. The subject should be instantly readable as the topic even in block form.
+SUBJECT: A noir-styled rendering of ${visualSubject}, positioned in the upper two-thirds of the frame, half-lit with dramatic shadow, conveying tension and consequence.
 
 STYLE EFFECTS:
-- Floating block particles or sparkle cubes near the subject
-- A small floating "!" speech bubble or experience-orb-style glow
-- Soft cube-shaped lighting rays in the background
-- Cloud blocks or particle effects radiating energy from behind the subject
+- Hard chiaroscuro lighting, deep shadow blocks
+- Shafts of light cutting through haze
+- Near-monochrome navy with a single gold light accent
+- Tense and cinematic — no soft or playful elements
 
 ${lockedBrandLayer}`
       },
-      simple: {
-        label: 'Simple Comic',
-        icon: '✏️',
-        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "The Brain Morsel" channel, a fun facts series about everyday topics. Simple modern flat cartoon style.
+      vintage: {
+        label: 'Vintage Print',
+        icon: '📰',
+        prompt: `A 9:16 vertical YouTube Shorts thumbnail for "How Empires Fell", a cinematic business-documentary channel about the collapse of famous companies and brands. Vintage editorial print style.
 
-ART STYLE: Clean modern flat cartoon illustration style — soft rounded shapes, minimal black outlines (1-2px or no outlines), flat solid colors with subtle gradient highlights, no halftone or texture. Friendly, approachable, slightly stylized like a high-end children's book or modern animated explainer (think Headspace, Duolingo, or Pixar's flat-illustration phase). Big expressive eyes, simplified anatomy, warm and inviting.
+ART STYLE: Vintage editorial / mid-century print illustration — textured paper feel, screen-print halftone shading, a restrained navy-and-gold palette with aged tones. The look of a classic business-magazine cover or archival annual-report illustration. Dignified, historical, serious.
 
-SUBJECT: A simple flat-cartoon hero illustration of ${visualSubject}, centered in the middle of the frame. Drawn with rounded soft shapes, big expressive personality, gentle highlights for dimension, and clean flat colors. The subject should feel cute and friendly, not intense.
+SUBJECT: A vintage-print rendering of ${visualSubject}, positioned in the upper two-thirds of the frame, illustrated with period-appropriate styling and a clear focal point.
 
 STYLE EFFECTS:
-- Small simple sparkles, dots, or geometric shapes (circles, stars) floating around the subject
-- Soft simplified light rays in the background
-- A small simple thought-bubble or "!" icon for curiosity
-- Clean, uncluttered — let the subject and topic title carry the energy
+- Subtle halftone / screen-print texture
+- Aged paper grain and muted print registration
+- Navy and gold ink tones, desaturated
+- Dignified and archival — no modern gloss or gimmicks
 
 ${lockedBrandLayer}`
       }
@@ -1538,30 +1608,48 @@ ${lockedBrandLayer}`
     window.__thumbStyles = styles;
     window.__thumbCurrentStyle = 'comic';
 
+    // Text Overlay panel — the literal text to type into CapCut / Canva
+    const overlayPanelHTML = `
+      <div class="overlay-panel">
+        <div class="overlay-panel-head">Text Overlay — type these into CapCut / Canva</div>
+        <div class="overlay-rows">
+          <div class="overlay-row">
+            <div class="overlay-tier">
+              <span class="overlay-tier-tag">TOP — brand name</span>
+              <div class="overlay-tier-text overlay-brand">${escapeHTML(overlayBrand || '—')}</div>
+            </div>
+            <button class="copy-btn" data-copy="${escapeHTML(overlayBrand)}">Copy</button>
+          </div>
+          <div class="overlay-row">
+            <div class="overlay-tier">
+              <span class="overlay-tier-tag">BOTTOM — gold hook box</span>
+              <div class="overlay-tier-text overlay-hook">${escapeHTML(topicTitle)}</div>
+            </div>
+            <button class="copy-btn" data-copy="${escapeHTML(topicTitle)}">Copy</button>
+          </div>
+        </div>
+        <div class="overlay-hint">White brand name (navy outline) on top · black text in a gold #D4AF37 box below · keep both in the lower third, subject's face clear above.</div>
+        <button class="copy-btn overlay-copy-both" data-copy="${escapeHTML(overlayBrand + '\n' + topicTitle)}">Copy both lines</button>
+      </div>`;
+
     thumbBlockHTML = `
     <div class="seo-section">
       <div class="seo-section-head">
-        <div class="label">Brain Morsel Thumbnail</div>
+        <div class="label">Thumbnail Package</div>
         <button class="copy-btn" id="thumbCopyBtn" data-copy="${escapeHTML(styles.comic.prompt)}">Copy prompt</button>
       </div>
       <div class="seo-section-body">
         <div class="thumb-block">
-          <div class="thumb-topic">
-            <div>
-              <div class="thumb-topic-label">Curiosity Hook (thumbnail title)</div>
-              <div class="thumb-topic-text">${escapeHTML(topicTitle)}</div>
-            </div>
-            <button class="copy-btn" data-copy="${escapeHTML(topicTitle)}">Copy hook</button>
-          </div>
+          ${overlayPanelHTML}
           <div class="thumb-style-bar" id="thumbStyleBar">
             ${pillsHTML}
           </div>
           <div class="thumb-prompt-wrap">
             <div class="thumb-prompt-head">
-              <div class="label">Full image-gen prompt (9:16) · <span id="thumbStyleLabel" style="color:var(--accent)">Comic</span></div>
+              <div class="label">Full image-gen prompt (9:16) · <span id="thumbStyleLabel" style="color:var(--accent)">Cinematic Comic</span></div>
             </div>
             <div class="thumb-prompt-text" id="thumbPromptText">${escapeHTML(styles.comic.prompt)}</div>
-            <div class="thumb-hint">Pick the art style that matches your video. Brand layer (channel name, "WAIT, WHAT?!", palette &amp; layout) stays locked — only the illustration style changes.</div>
+            <div class="thumb-hint">The Text Overlay above is what you type onto the thumbnail by hand. The image-gen prompt below is for generating the background art. Brand layer (overlay, palette &amp; layout) stays locked — only the illustration style changes.</div>
           </div>
         </div>
       </div>
@@ -1649,7 +1737,7 @@ ${lockedBrandLayer}`
       </div>
     </div>
 
-    <!-- THUMBNAIL PROMPT (Brain Morsel) -->
+    <!-- THUMBNAIL PACKAGE (How Empires Fell) -->
     ${thumbBlockHTML}
   `;
 
